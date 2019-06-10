@@ -1,0 +1,17 @@
+﻿[
+	{
+		"Id": 1,
+		"Name": "Zaragoza",
+		"AdjoiningCities": [ 2, 3 ]
+	},
+	{
+		"Id": 2,
+		"Name": "Huesca",
+		"AdjoiningCities": [ 1 ]
+	},
+	{
+		"Id": 3,
+		"Name": "Teruel",
+		"AdjoiningCities": [ 1 ]
+	}
+]
