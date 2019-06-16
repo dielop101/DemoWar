@@ -67,12 +67,18 @@ namespace LogicDemoWar
 
             citiesIdExcluded.Add(cityDefeated.Id);
 
-            if (!cityDefeated.AdjoiningCities.Any() || (cityDefeated.AdjoiningCities.Intersect(citiesIdExcluded).Count() == cityDefeated.AdjoiningCities.Count))    //No hay ciudades próximas. Volvemos a la ciudad anterior quitando del random el actual
+            if (cityDefeated.AdjoiningCities.Intersect(citiesIdExcluded).Count() == cityDefeated.AdjoiningCities.Count)    //No hay ciudades próximas. Volvemos a la ciudad anterior quitando del random el actual
             {
-                var idPrevious = city.Last().Id;
-
-                if (idPrevious == cityDefeated.Id)  //en el caso de que la ciudad anterior sea la misma que la derrotada, seguimos buscando hacia arriba
-                    idPrevious = city.ElementAt(city.Count - 2).Id;
+                var idPrevious = 0;
+                for (int i = 0; i < city.Count; i++)
+                {
+                    var newcity = city[i];
+                    if (newcity.AdjoiningCities.Intersect(citiesIdExcluded).Count() != newcity.AdjoiningCities.Count)
+                    {
+                        idPrevious = newcity.Id;
+                        break;
+                    }
+                }
 
                 city.Add(cityDefeated);
 
