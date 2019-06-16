@@ -13,9 +13,9 @@ namespace DataDemoWar.Entity
         public List<int> AdjoiningCities { get; set; }
         public int? ConqueredBy { get; set; }
 
-        public int GetRandomAdjoiningCity(int idExcluded = -1)
+        public int GetRandomAdjoiningCity(List<int> idsExcluded)
         {
-            return AdjoiningCities.Where(i => i != idExcluded).Shuffle().FirstOrDefault();
+            return AdjoiningCities.Where(i => !idsExcluded.Contains(i)).Shuffle().FirstOrDefault();
         }
     }
 }

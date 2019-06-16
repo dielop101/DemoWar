@@ -1,6 +1,7 @@
 ﻿using DataDemoWar.DataInit;
 using DataDemoWar.Entity;
 using LogicDemoWar.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,15 +29,8 @@ namespace LogicDemoWar
 
                 var cityWin = _cityDao.GetRandomCityNotConquered();
 
-                var cityDefeatedId = cityWin.GetRandomAdjoiningCity(cityWin.Id);
-                var cityDefeated = _cityDao.GetCityById(cityDefeatedId);
-
-                //check si está conquistada por la cityWin. Si no lo está => lo estará. Si lo está => cogemos los AdjoiningCities de la cityDefeated
-                if (cityDefeated.ConqueredBy == cityWin.Id)
-                {
-                    cityDefeatedId = cityDefeated.GetRandomAdjoiningCity(cityWin.Id);
-                    cityDefeated = _cityDao.GetCityById(cityDefeatedId);
-                }
+                var listExcluded = new List<int>() { cityWin.Id };
+                var cityDefeated = GetCityDefeated(cityWin, listExcluded, cityWin.Id);
 
                 var result = new InfoCityReport();
                 result.CityWin.Name = cityWin.Name;
@@ -47,7 +41,7 @@ namespace LogicDemoWar
                     result.CityDefeated.Conquered = previousCityConquer.Name;
                 }
 
-                _cityDao.SaveConqueredCity(cityWin.Id, cityDefeatedId);
+                _cityDao.SaveConqueredCity(cityWin.Id, cityDefeated.Id);
 
                 return result;
             }
@@ -60,6 +54,24 @@ namespace LogicDemoWar
                     Name = _cityDao.GetCityNotConquered().First().Name
                 }
             };
+        }
+
+        private City GetCityDefeated(City city, List<int> citiesIdExcluded, int cityWin)
+        {
+            var cityDefeatedId = city.GetRandomAdjoiningCity(citiesIdExcluded);
+            var cityDefeated = _cityDao.GetCityById(cityDefeatedId);
+
+            if (cityDefeated.ConqueredBy != cityWin)
+                return cityDefeated;
+
+            citiesIdExcluded.Add(cityDefeated.Id);
+            if (!cityDefeated.AdjoiningCities.Any())    //No hay ciudades próximas. Volvemos a la ciudad anterior quitando del random el actual
+            {
+                return GetCityDefeated(city, citiesIdExcluded, cityWin);
+            }
+
+            //hay ciudades próximas. Seguimos buscando
+            return GetCityDefeated(cityDefeated, citiesIdExcluded, cityWin);
         }
     }
 }
