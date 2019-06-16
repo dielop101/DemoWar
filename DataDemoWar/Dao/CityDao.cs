@@ -27,7 +27,7 @@ namespace DataDemoWar.DataInit
             if (GetCityNotConquered().Count() == 1)
             {
                 //checkeamos tambien que todas las conquistas sean del mismo
-                return CitiesData.GroupBy(c => c.ConqueredBy).Count() != (CitiesData.Count - 1);
+                return CitiesData.Select(x => x.ConqueredBy).Where(c => !c.HasValue).Count() != 1;
             }
 
             return true;
