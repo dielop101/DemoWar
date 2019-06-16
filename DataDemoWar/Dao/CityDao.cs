@@ -18,7 +18,7 @@ namespace DataDemoWar.DataInit
 
         private List<City> DataInit()
         {
-            var text = System.IO.File.ReadAllText(@"C:\Users\Diego\source\repos\Github\DemoWar\DataDemoWar\Source\Cities.json");
+            var text = System.IO.File.ReadAllText(@"C:\Users\Diego\source\repos\Github\DemoWar\DataDemoWar\Source\Vueling.json");
             return JsonConvert.DeserializeObject<List<City>>(text);
         }
 

@@ -72,7 +72,7 @@ namespace LogicDemoWar
                 var idPrevious = city.Last().Id;
 
                 if (idPrevious == cityDefeated.Id)  //en el caso de que la ciudad anterior sea la misma que la derrotada, seguimos buscando hacia arriba
-                    idPrevious = city.ElementAt(city.Count - 1).Id;
+                    idPrevious = city.ElementAt(city.Count - 2).Id;
 
                 city.Add(cityDefeated);
 
